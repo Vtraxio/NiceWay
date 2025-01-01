@@ -21,7 +21,8 @@ namespace NiggaWay {
 	}
 
 	public class GeneralUtils {
-		public static float ConvertRangeStandard(float value) => ConvertRange(-100, 100, 0, 500, value);
+		public static float ConvertRangeJ2P(float value) => ConvertRange(-100, 100, 0, 500, value);
+		public static float ConvertRangeP2J(float value) => ConvertRange(0, 500, -100, 100, value);
 
 		public static float ConvertRange(
 			int   originalStart, int originalEnd,

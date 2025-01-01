@@ -26,7 +26,7 @@ namespace NiggaWay {
 		}
 
 		private void Calculate(int origin) {
-			// Punty s¹ obliczane w stylu bubble sorta, dlatego punkt pocz¹tkowy trzeba daæ na sam pocz¹tek a wywaliæ to, co wtedy tam by³o 
+			// Punty s¹ sortowane i trzeba zamieniæ punkt pocz¹tkowy z 1 w liœcie i go pomin¹æ, ¿eby nie jebnê³o
 			ListUtils.Swap(_cities, 0, origin);
 			// Punkt, dla którego w³aœnie liczymy najbli¿sze miasto
 			var current     = 0;
@@ -53,12 +53,11 @@ namespace NiggaWay {
 				ListUtils.Swap(_cities, current + 1, closest.i);
 
 				current++;
-				// Tu mo¿e byæ null, wiêc robimy ?? 0, aby visual zamkn¹ morde.
 				totalLength += closest.city.DistanceToNext ?? 0;
 			}
 
 			sw.Stop();
-			lengthLbl.Text = $@"D³ugoœæ: {totalLength} | Czas: {sw.ElapsedMilliseconds}ms";
+			lengthLbl.Text = $@"D³ugoœæ: {totalLength} | Czas: {sw.Elapsed.TotalMilliseconds}ms";
 
 			_ready = true;
 			Refresh();
@@ -67,8 +66,8 @@ namespace NiggaWay {
 		private void pictureBox1_Click(object sender, EventArgs e) {
 			var mouse = pictureBox1.PointToClient(MousePosition);
 			// W json jest od -100 do 100 a w pictureBoxie od 0 do 500 wiêc trzeba to przekonwertowaæ
-			var x = GeneralUtils.ConvertRange(0, 500, -100, 100, mouse.X);
-			var y = GeneralUtils.ConvertRange(0, 500, -100, 100, mouse.Y);
+			var x = GeneralUtils.ConvertRangeP2J(mouse.X);
+			var y = GeneralUtils.ConvertRangeP2J(mouse.Y);
 
 			for (var i = 0; i < _cities.Count; i++) {
 				var city = _cities[i];
@@ -86,8 +85,8 @@ namespace NiggaWay {
 			e.Graphics.Clear(Color.White);
 
 			foreach (var point in _cities) {
-				var x = GeneralUtils.ConvertRangeStandard(point.Point.X);
-				var y = GeneralUtils.ConvertRangeStandard(point.Point.Y);
+				var x = GeneralUtils.ConvertRangeJ2P(point.Point.X);
+				var y = GeneralUtils.ConvertRangeJ2P(point.Point.Y);
 				e.Graphics.FillEllipse(point.Selected ? Brushes.Red : Brushes.Blue, x - 5f, y - 5f, 10f, 10f);
 			}
 
@@ -99,10 +98,10 @@ namespace NiggaWay {
 
 				e.Graphics.DrawLine(
 									Pens.Black,
-									GeneralUtils.ConvertRangeStandard(city.Point.X),
-									GeneralUtils.ConvertRangeStandard(city.Point.Y),
-									GeneralUtils.ConvertRangeStandard(next.Point.X),
-									GeneralUtils.ConvertRangeStandard(next.Point.Y)
+									GeneralUtils.ConvertRangeJ2P(city.Point.X),
+									GeneralUtils.ConvertRangeJ2P(city.Point.Y),
+									GeneralUtils.ConvertRangeJ2P(next.Point.X),
+									GeneralUtils.ConvertRangeJ2P(next.Point.Y)
 								   );
 			}
 		}
